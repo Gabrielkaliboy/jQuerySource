@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset='UTF-8' />
+    <style>
+        #div1{
+            border:3px dashed #d6d6d6;
+            width:500px;
+            height: 400px;
+            margin:100px auto;
+        }
+    </style>
+    <title>拖拽实例</title>
+</head>
+
+<body>
+    <div id="div1">
+
+    </div>
+</body>
+<script>
+    window.onload = function () {
+        var dropbox;
+
+        dropbox = document.getElementById("div1");
+        //拖拽进入
+        dropbox.addEventListener("dragenter", dragenter, false);
+        //拖住滑过
+        dropbox.addEventListener("dragover", dragover, false);
+        //拖拽
+        dropbox.addEventListener("drop", drop, false);
+
+        function dragenter(e) {
+            //阻止浏览器的默认事件，如果不加dragenter和dragover的话，浏览器默认打开一个新的tab去预览图片
+            e.stopPropagation();
+            e.preventDefault();
+        }
+
+        function dragover(e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+
+        function drop(e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            //去看一下DataTransfer的API
+            // 在进行拖放操作时，DataTransfer 对象用来保存被拖动的数据。它可以保存一项或多项数据、一种或者多种数据类型
+            var dt = e.dataTransfer;
+            //再来读取拖拽文件的files信息！files就是个对象，里面放着上传的所有文件
+            var files = dt.files;
+            //拿到信息以后，我们在调用函数去处理
+            handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            //files.length是上传文件的个数
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                var imageType = /image.*/;
+
+                if (!file.type.match(imageType)) {
+                    continue;
+                }
+
+                var img = document.createElement("img");
+                //返回元素的类名,用add和remove来进行添加类，删除类。这里就是给img添加了一个obj类
+                img.classList.add("obj");
+                img.file = file;
+                div1.appendChild(img);
+
+                //FileReader 对象允许Web应用程序异步读取存储在用户计算机上的文件
+                var reader = new FileReader();
+                //当读取操作成功完成时调用
+                reader.onload = (function (aImg) { return function (e) { aImg.src = e.target.result; }; })(img);
+                //开始读取指定的Blob对象或File对象中的内容. 
+                reader.readAsDataURL(file);
+            }
+        }
+    }
+
+</script>
+</html>
