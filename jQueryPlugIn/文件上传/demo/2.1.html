@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset='UTF-8' />
+    <title>FileList and File </title>
+    <script type="text/javascript" language="JavaScript">
+        window.onload = function () {
+            var bt1 = document.getElementById("bt1");
+            bt1.onclick = function () {
+                showFiles();
+            };
+            function showFiles() {
+                var file,
+                    lastModified,
+                    lastModifiedDate,
+                    fileName,
+                    fileSize,
+                    fileUrl,
+                    filetType,
+                    fileDetail,
+                    fileDetail="",//一定要初始化否则+=的时候为undefined
+                    textContain = document.getElementById("div1"),
+                    len = document.getElementById('file').files.length;//返回FileList文件列表对象
+                for (var i = 0; i < len; i++) {
+                    file = document.getElementById('file').files[i];
+                    lastModified = file.lastModified;
+                    lastModifiedDate = file.lastModifiedDate;
+                    fileName = file.name;
+                    fileSize = file.size;
+                    fileUrl = file.webkitRelativePath;
+                    filetType = file.type;
+                    fileDetail +="文件名称:" + fileName + ",文件大小:" + fileSize + ",文件类型:" +
+                        filetType + ",最后修改时间:" + lastModified + ",最后修改时间毫秒数:" + lastModifiedDate +
+                        ",文件所在路径:" + fileUrl + "\<br><br>";
+                };
+                textContain.innerHTML = fileDetail;
+
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <input type="file" id='file' multiple="multiple" width="80px" />
+    <input type="button" id="bt1" value="上传文件详情"  />
+    <div>详情：</div><div id="div1"></div></div>
+</body>
+
+</html>
